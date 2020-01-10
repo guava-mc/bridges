@@ -6,6 +6,6 @@ var local =
 var heal3 = 'https://heal3.poly.asu.edu/web/timelines/home';
 var development = heal3;
 
-export const Properties = {
+export const Config = {
   URI: development,
 };

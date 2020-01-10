@@ -47,3 +47,29 @@ const localNotification = () => {
 };
 
 export {configure, localNotification};
+/** OG
+ // import React from 'react';
+ // import {Platform} from 'react-native';
+ // import {WebView} from 'react-native-webview';
+ // import {Config as props} from './properties';
+ // // import {pushNotifications} from './services'; //push ex 2
+ // // import AppContainer from './AppContainer'; //push ex 2
+ //
+ // // pushNotifications.configure();
+ //
+ // const App: () => React$Node = () => {
+//   console.log(props.URI);
+//   return (
+//     <WebView
+//       source={{uri: props.URI}}
+//       style={{marginTop: Platform.OS === 'ios' ? 30 : 0}}
+//     />
+//   );
+// };
+
+ // const App = () => <AppContainer />; //push ex 2
+
+ export default App;
+ * OG END
+ *
+  */
