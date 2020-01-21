@@ -27,6 +27,34 @@ export default class AutoLogin extends React.Component {
   webview = null;
   activeSession = {};
   autoSignIn = '';
+  overlay = `var div = document.createElement('div');
+div.id='overlay'
+document.body.appendChild(div);
+var css = \`#overlay {
+                        position: fixed;
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: rgba(0,0,0,1);
+                        z-index: 2;
+                        cursor: pointer;
+                      }\`,
+                          head = document.head || document.getElementsByTagName('head')[0],
+                          style = document.createElement('style');
+                      
+                      head.appendChild(style);
+                      
+                      style.type = 'text/css';
+                      if (style.styleSheet){
+                        // This is required for IE8 and below.
+                        style.styleSheet.cssText = css;
+                      } else {
+                        style.appendChild(document.createTextNode(css));
+                      }`
   constructor() {
     super();
   }
@@ -53,12 +81,10 @@ export default class AutoLogin extends React.Component {
         //   JSON.parse(activeSession);
         // this.activeSession = activeSession;
         //test for auto login to webView
-        this.autoSignIn = `
-        var login = (function() {
-        var executed = false;
-        return function() {
-          if(!executed) {
-            executed = true;
+        if (this.state.isLoading) {
+          this.autoSignIn = `
+          ${this.overlay}          
+          document.getElementById("overlay").style.display = "block";
           document.forms["new_user"]["user_email"].value = "${
             this.activeSession.email
           }";
@@ -66,12 +92,11 @@ export default class AutoLogin extends React.Component {
             this.activeSession.password
           }";
           document.forms.new_user.submit();
-          }
-          };
-          })();
-          
-          login();
+          true;
           `;
+        } else {
+          this.autoSignIn = 'true;';
+        }
         // }
       })
       .then(done => {
@@ -87,34 +112,44 @@ export default class AutoLogin extends React.Component {
         });
       });
   };
+
   render() {
-    if (this.state.isLoading) {
+    if (false) {
       return (
         <View>
           <ActivityIndicator size="large" />
         </View>
       );
+    } else {
+      console.log('injected:\n' + this.autoSignIn);
+      return (
+        <WebView
+          ref={ref => (this.webview = ref)}
+          source={{uri: Config.URI + ''}}
+          style={{marginTop: Platform.OS === 'ios' ? 30 : 0}}
+          thirdPartyCookiesEnabled={true}
+          // injectedJavaScript={this.autoSignIn}
+          onNavigationStateChange={this.handleNavChange}
+        />
+      );
     }
-    console.log('injected:\n' + this.autoSignIn);
-    return (
-      <WebView
-        ref={ref => (this.webview = ref)}
-        source={{uri: Config.URI + '/auth/sign_in'}}
-        style={{marginTop: Platform.OS === 'ios' ? 30 : 0}}
-        thirdPartyCookiesEnabled={true}
-        injectedJavaScript={this.autoSignIn}
-        onMessage={event => {
-          this.props.navigation.navigate('Home');
-        }}
-      />
-    );
   }
   handleNavChange = newNavState => {
     if (!this.setState.isLoading) {
       console.log(newNavState);
-      this.setState({isLoading: true});
+      if (newNavState.title.length > 0 && this.autoSignIn.length > 0) {
+        this.webview.injectJavaScript(this.autoSignIn);
+        this.autoSignIn =
+          `${this.overlay}          
+          document.getElementById("overlay").style.display = "block";
+          true;
+          `;
+      }
+      if(newNavState.url.includes('home'))
+        this.props.navigation.navigate('Home');
+      // this.setState({isLoading: true});
       // if (!this.state.isLoading && newNavState.url.includes('home')) {
-      this.props.navigation.navigate('Home');
+      // this.props.navigation.navigate('Home');
     }
     // }
   };
