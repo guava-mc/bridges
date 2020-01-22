@@ -2,6 +2,8 @@ import React from 'react';
 
 import {View, Image, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import WebView from 'react-native-webview';
+import {Config} from '../config';
 
 export default class Splash extends React.Component {
   constructor() {
@@ -41,6 +43,7 @@ export default class Splash extends React.Component {
           style={styles.logo}
           source={require('../resources/bridgesIcon.png')}
         />
+        <WebView source={{uri: 'https://google.com'}} />
         <View style={{width: 256, height: 256}} />
       </View>
     );
@@ -58,5 +61,7 @@ const styles = StyleSheet.create({
     width: 256,
     height: 256,
     resizeMode: 'contain',
+    position: 'absolute',
+    padding: 20,
   },
 });

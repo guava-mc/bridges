@@ -39,7 +39,7 @@ var css = \`#overlay {
                         left: 0;
                         right: 0;
                         bottom: 0;
-                        background-color: rgba(0,0,0,1);
+                        background-color: rgba(40,44,55,1);
                         z-index: 2;
                         cursor: pointer;
                       }\`,
@@ -54,7 +54,9 @@ var css = \`#overlay {
                         style.styleSheet.cssText = css;
                       } else {
                         style.appendChild(document.createTextNode(css));
-                      }`
+                      }
+                      document.getElementById("overlay").style.display = "block";
+                      `;
   constructor() {
     super();
   }
@@ -83,8 +85,7 @@ var css = \`#overlay {
         //test for auto login to webView
         if (this.state.isLoading) {
           this.autoSignIn = `
-          ${this.overlay}          
-          document.getElementById("overlay").style.display = "block";
+          
           document.forms["new_user"]["user_email"].value = "${
             this.activeSession.email
           }";
@@ -92,7 +93,7 @@ var css = \`#overlay {
             this.activeSession.password
           }";
           document.forms.new_user.submit();
-          true;
+          void(0);
           `;
         } else {
           this.autoSignIn = 'true;';
@@ -123,30 +124,36 @@ var css = \`#overlay {
     } else {
       console.log('injected:\n' + this.autoSignIn);
       return (
-        <WebView
-          ref={ref => (this.webview = ref)}
-          source={{uri: Config.URI + ''}}
-          style={{marginTop: Platform.OS === 'ios' ? 30 : 0}}
-          thirdPartyCookiesEnabled={true}
-          // injectedJavaScript={this.autoSignIn}
-          onNavigationStateChange={this.handleNavChange}
-        />
+        <View style={styles.frame}>
+          <WebView
+            ref={ref => (this.webview = ref)}
+            source={{uri: Config.URI + ''}}
+            style={{marginTop: Platform.OS === 'ios' ? 30 : 0}}
+            thirdPartyCookiesEnabled={true}
+            // injectedJavaScript={this.autoSignIn}
+            onNavigationStateChange={this.handleNavChange}
+          />
+          <View style={styles.overlay} />
+        </View>
       );
     }
   }
   handleNavChange = newNavState => {
     if (!this.setState.isLoading) {
       console.log(newNavState);
-      if (newNavState.title.length > 0 && this.autoSignIn.length > 0) {
+      if (
+        newNavState.title.length > 0 &&
+        this.autoSignIn.length > 0)
+       {
         this.webview.injectJavaScript(this.autoSignIn);
-        this.autoSignIn =
-          `${this.overlay}          
-          document.getElementById("overlay").style.display = "block";
-          true;
+        this.autoSignIn = `
+          void(0);
           `;
+         if (newNavState.url.includes('home')) {
+           console.log('Navigating to home')
+           this.props.navigation.navigate('Home');
+         }
       }
-      if(newNavState.url.includes('home'))
-        this.props.navigation.navigate('Home');
       // this.setState({isLoading: true});
       // if (!this.state.isLoading && newNavState.url.includes('home')) {
       // this.props.navigation.navigate('Home');
@@ -162,9 +169,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#282c37',
   },
-  logo: {
-    width: 256,
-    height: 256,
-    resizeMode: 'contain',
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'black',
+    opacity: 0,
   },
 });

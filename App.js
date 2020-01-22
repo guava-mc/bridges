@@ -45,7 +45,7 @@ export default class App extends Component<Props> {
     );
     console.log(Config.URI);
     // return <AppNavigation />;
-    return <AppNavigation/>
+    return <AppNavigation />;
   }
 
   // } else {
