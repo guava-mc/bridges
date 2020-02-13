@@ -1,19 +1,25 @@
+import React, {Component} from 'react';
+import {Alert} from 'react-native';
+import {WebView} from 'react-native-webview';
+import {Platform} from 'react-native';
+import PushService from './PushService';
+import appConfig from './app.json';
+import {Config} from './config';
 
-import React from 'react';
-import { Platform } from 'react-native';
-import { WebView } from 'react-native-webview';
-import { Properties as props } from './properties';
+type Props = {};
+export default class App extends Component<Props> {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-const App: () => React$Node = () => {
-	console.log(props.URI)
-  return (
-    <WebView
-        source={{ uri: props.URI }}
-        style={{ marginTop: Platform.OS === 'ios' ? 30 : 0}}
+  render() {
+    console.log(Config.URI);
+    return (
+      <WebView
+        source={{uri: Config.URI}}
+        style={{marginTop: Platform.OS === 'ios' ? 45 : 0}}
       />
-  );
-};
-
-export default App;
-
-
+    );
+  }
+}

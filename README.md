@@ -1,9 +1,17 @@
 ## bridges React Native App README
 
+#### Table of Contents
+
+* [Requirements](#Requirements)
+* [Installing Dependencies](#Installing-Dependencies)
+* [Build and Run ](#Build-and-Run)
+   * [Android](#Android)
+   * [iOS](#iOS)
 
 #### Requirements
 
 * node
+* yarn
 * watchman
 
 ##### iOS
@@ -23,12 +31,12 @@ https://facebook.github.io/react-native/docs/getting-started
 In order to test the application on your computer you need to have an active emulator for Android and/or iOS.
 
 first install all the node modules from bridges/:\
-`npm install` or `yarn install`
+`yarn install`
 
-##### Setting local [properties.js](./properties.js) 
-You can change the properties.URI field to any custom page you want to be displayed when the app launches.
+##### Setting local [config.js](config.js) 
+You can change the Config.URI field to any custom page you want to be displayed when the app launches.
 ```
-export const Properties = {
+export const Config = {
 	URI: development
 }
 ```
@@ -38,7 +46,7 @@ Current variable options for URI include `development` and `local`.\
 `development` will launch the heal3 server.\
 `local` will launch a local build using localhost and the designated `port` which by default is 3000.
 
-##### Run Android 
+##### Android 
 You can create an emulator on Android Studio like so: [Create and Manage AVDs](https://developer.android.com/studio/run/managing-avds)
 
 launch AVD with API >= 28 
@@ -53,9 +61,9 @@ Copy the name of the emulator you want to run\
 `emulator @[name-of-emulator]`
 
 run the app in the android AVD from the command line with:\
-`npx react-native run-android`
+`react-native run-android`
 
-##### Run iOS 
+##### iOS 
 from within bridges/ios run:\
 `pod install`
 

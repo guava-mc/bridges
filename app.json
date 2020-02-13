@@ -1,4 +1,5 @@
 {
   "name": "bridges",
-  "displayName": "bridges"
+  "displayName": "bridges",
+  "senderID": "REQUIRED FOR REMOTE PUSH ANDROID"
 }
