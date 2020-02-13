@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import PushService from '../PushService';
 import appConfig from '../app.json';
 import {Config} from '../config';
+import OverlayIndicator from './overlayIndicator';
 
 type Props = {};
 
@@ -47,7 +48,9 @@ export default class Home extends Component<Props> {
       });
   };
   render() {
-    console.log(Config.URI);
+    //import state from previous state
+    const {params} = this.props.navigation.state || {resource: ''};
+    console.log(Config.URI + params.resource);
     // const logged = loggedIn().then(response => response === true);
     // if (!logged) {
     //   console.log('signing in user');
@@ -57,7 +60,7 @@ export default class Home extends Component<Props> {
       <View style={styles.overlay}>
         <WebView
           ref={ref => (this.webview = ref)}
-          source={{uri: Config.URI}}
+          source={{uri: Config.URI + params.resource}}
           style={{marginTop: Platform.OS === 'ios' ? 45 : 0}}
           thirdPartyCookiesEnabled={true}
           //const response = userToken(result);
@@ -70,7 +73,7 @@ export default class Home extends Component<Props> {
           // renderLoading={() => <View style={styles.overlay} />}
           // startInLoadingState
         />
-        {this.state.isLoading && <View style={styles.overlay} />}
+        {this.state.isLoading && <OverlayIndicator />}
       </View>
     );
   }
@@ -78,12 +81,13 @@ export default class Home extends Component<Props> {
   // RICK ROLL
   handleNavChange = newNavState => {
     console.log(newNavState);
-    // if (newNavState.url.includes('/auth/setup')) {
-    //   console.log('getting App Auth');
-    //   this.webview.injectJavaScript(
-    //     'window.location = http://0.0.0.0:3000/oauth/authorize?response_type=code&client_id=7iMqLghqWXYxy4utJFkHIn77Yl9AMtSMNKcp_oH60pI&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=read%20write%20follow%20push',
-    //   );
-    // }
+    if (newNavState.url.includes('/web') && !false) {
+      //TODO check if token is in active session
+      console.log('getting App Auth');
+      // this.webview.injectJavaScript(
+      //   'window.location = "https://10.0.2.2:3000/oauth/authorize?response_type=code&client_id=7iMqLghqWXYxy4utJFkHIn77Yl9AMtSMNKcp_oH60pI&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=read%20write%20follow%20push"',
+      // );
+    }
   };
 }
 
@@ -105,7 +109,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: '#393F4F',
     opacity: 1,
   },
 });

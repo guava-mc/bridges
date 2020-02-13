@@ -23,12 +23,12 @@ export default class Splash extends React.Component {
       .then(activeSession => {
         console.log('session: ' + activeSession);
         // if (activeSession !== null) {
-        if (false) {
-          //TODO TEST
+        if (true) {
+          // TODO TEST
           JSON.parse(activeSession);
-          this.props.navigation.navigate('Home');
+          this.props.navigation.navigate('Home', {resource: ''}); // TODO GO TO autoLogin or check for log in and auto login from home.
         } else {
-          this.props.navigation.navigate('AutoLogin');
+          this.props.navigation.navigate('Register');
         }
       })
       .catch(error => {

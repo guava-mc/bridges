@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import React from 'react';
 import {StyleSheet, View, ActivityIndicator, Platform} from 'react-native';
 import WebView from 'react-native-webview';
+import OverlayIndicator from './overlayIndicator';
 
 // async function singIn(authenticity_token) {
 //   const data = new FormData();
@@ -133,7 +134,7 @@ var css = \`#overlay {
             // injectedJavaScript={this.autoSignIn}
             onNavigationStateChange={this.handleNavChange}
           />
-          <View style={styles.overlay} />
+          <OverlayIndicator/>
         </View>
       );
     }

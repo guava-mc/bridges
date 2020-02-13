@@ -6,8 +6,8 @@ const local =
 const heal3 = 'https://heal3.poly.asu.edu';
 const development = heal3;
 const v1_3 = 'https://nrd.li/about'; //works
-const v3_0_1 = 'https://linuxrocks.online';
+const v3_0_1 = 'https://linuxrocks.online'; //works
 const grr = '';
 export const Config = {
-  URI: local,
+  URI: heal3,
 };

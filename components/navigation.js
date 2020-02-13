@@ -23,6 +23,8 @@ const cont = createStackNavigator(
     initialRouteName: 'Splash',
     defaultNavigationOptions: {
       headerShown: false,
+      gestureEnabled: false,
+        //TODO look into removing navigation animation
     },
   },
 );

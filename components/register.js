@@ -19,6 +19,9 @@ function Separator() {
 export default class Register extends React.Component {
   constructor() {
     super();
+    this.state = {
+      invite_code: '',
+    };
   }
 
   componentDidMount() {}
@@ -30,15 +33,25 @@ export default class Register extends React.Component {
           style={styles.logo}
           source={require('../resources/bridgesIcon.png')}
         />
+        <TextInput
+          style={styles.textinput}
+          onChangeText={text => this.setState({invite_code: text})}
+          // onBlur={() => setFieldTouched('username')}
+          placeholder="Enter Invite Code"
+        />
         <Button
           title="Submit"
-          onPress={() => Alert.alert('TODO NAV TO WEBVIEW WITH LINK')}
+          onPress={() =>
+            this.props.navigation.navigate('Home', {
+              resource: '/invite/' + this.state.invite_code,
+            })
+          }
         />
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Login');
+            this.props.navigation.navigate('Home', {resource: ''});
           }}>
-          <Text style={styles.navtext}>Already a member? Login</Text>
+          <Text style={styles.navtext}>Login</Text>
         </TouchableOpacity>
       </View>
     );
@@ -63,7 +76,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 14,
     marginTop: 20,
-    fontFamily: 'SourceSansPro-Bold',
   },
   separator: {
     marginVertical: 8,
@@ -73,5 +85,20 @@ const styles = StyleSheet.create({
   buttonWidth: {
     width: 100,
     height: 100,
+  },
+  textinput: {
+    fontSize: 20,
+    width: '75%',
+    //alignSelf: "stretch",
+    textAlign: 'center',
+    //alignItems: "center",
+    height: 40,
+    paddingBottom: 8,
+    justifyContent: 'center',
+    marginTop: 20,
+    borderRadius: 25,
+    borderColor: '#607D8B',
+    borderWidth: 4,
+    color: '#FFFFFF',
   },
 });
