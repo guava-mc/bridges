@@ -92,35 +92,6 @@ export default class App extends Component<Props> {
     return <AppNavigation />;
   }
 
-  // } else {
-  //   return (
-  //     <WebView
-  //       ref={ref => (this.webview = ref)}
-  //       // source={{uri: Config.URI}}
-  //       source={{uri: Config.URI + '/auth/sign_in'}}
-  //       style={{marginTop: Platform.OS === 'ios' ? 30 : 0}}
-  //       // injectedJavaScript={runFirst}
-  //       injectedJavaScript={scrapeForm}
-  //       onMessage={event => {
-  //         let result = event.nativeEvent.data.split(' ');
-  //         this.setState({tempUserInfo: result});
-  //         console.log(
-  //           Platform.OS.toString() +
-  //             ' auth_token: ' +
-  //             result[0] +
-  //             ' email: ' +
-  //             result[1] +
-  //             ' pwd: ' +
-  //             result[2],
-  //         );
-  //         //const response = userToken(result);
-  //       }}
-  //       onNavigationStateChange={this.handleNavChange}
-  //     />
-  //   );
-  // }
-  // }
-
   // RICK ROLL
   handleNavChange = newNavState => {
     console.log(newNavState);
