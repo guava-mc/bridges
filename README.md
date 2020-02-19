@@ -45,7 +45,7 @@ export const Config = {
 
 Simply replace 'development' with whatever URI you want. ex: `https://google.com`\
 Current variable options for URI include `development` and `local`.\
-`development` will launch the heal3 server.\
+`development`should point to the dev instance.\
 `local` will launch a local build using localhost and the designated `port` which by default is 3000.
 
 ##### On Android
