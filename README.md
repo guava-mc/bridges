@@ -48,7 +48,7 @@ Current variable options for URI include `development` and `local`.\
 `development` will launch the heal3 server.\
 `local` will launch a local build using localhost and the designated `port` which by default is 3000.
 
-##### On Android: 
+##### On Android
 You can create an emulator on Android Studio like so: [Create and Manage AVDs](https://developer.android.com/studio/run/managing-avds)
 
 launch AVD with API >= 28 
