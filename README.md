@@ -7,8 +7,8 @@
    * [iOS](#iOS)
 * [Installing Dependencies](#Installing-Dependencies)
 * [Build and Run ](#Build-and-Run)
-   * [Android](#Android:)
-   * [iOS](#iOS:)
+   * [Android](#On-Android)
+   * [iOS](#On-iOS)
 
 #### Requirements
 
@@ -48,7 +48,7 @@ Current variable options for URI include `development` and `local`.\
 `development` will launch the heal3 server.\
 `local` will launch a local build using localhost and the designated `port` which by default is 3000.
 
-##### Android: 
+##### On Android: 
 You can create an emulator on Android Studio like so: [Create and Manage AVDs](https://developer.android.com/studio/run/managing-avds)
 
 launch AVD with API >= 28 
@@ -65,7 +65,7 @@ Copy the name of the emulator you want to run\
 run the app in the android AVD from the command line with:\
 `react-native run-android`
 
-##### iOS: 
+##### On iOS 
 from within bridges/ios run:\
 `pod install`
 
