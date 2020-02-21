@@ -94,7 +94,7 @@ export default class Home extends Component<Props> {
       console.log('no active session');
       AsyncStorage.removeItem('activeSession')
         .then(this.setState({activeSession: false}))
-        .catch(error => console.log('error saving session ' + error));
+        .catch(error => console.log('error ending session ' + error));
     }
   };
 }
