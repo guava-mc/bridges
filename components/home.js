@@ -29,7 +29,7 @@ export default class Home extends Component<Props> {
     super(props);
     this.state = {
       senderId: appConfig.senderID,
-      activeSession: {},
+      activeSession: false,
       isLoading: true,
     };
   }
@@ -81,12 +81,20 @@ export default class Home extends Component<Props> {
   // RICK ROLL
   handleNavChange = newNavState => {
     console.log(newNavState);
-    if (newNavState.url.includes('/web') && !false) {
-      //TODO check if token is in active session
-      console.log('getting App Auth');
-      // this.webview.injectJavaScript(
-      //   'window.location = "https://10.0.2.2:3000/oauth/authorize?response_type=code&client_id=7iMqLghqWXYxy4utJFkHIn77Yl9AMtSMNKcp_oH60pI&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=read%20write%20follow%20push"',
-      // );
+    if (newNavState.url.includes('/web') && !this.state.activeSession) {
+      console.log('detected active session');
+      AsyncStorage.setItem('activeSession', 'hi mom')
+        .then(this.setState({activeSession: true}))
+        .catch(error => console.log('error saving session ' + error));
+    }
+    if (
+      newNavState.url.includes('/sign_out') ||
+      newNavState.url.includes('/sign_in')
+    ) {
+      console.log('no active session');
+      AsyncStorage.removeItem('activeSession')
+        .then(this.setState({activeSession: false}))
+        .catch(error => console.log('error saving session ' + error));
     }
   };
 }
@@ -110,5 +118,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     opacity: 1,
+    backgroundColor: '#393F4F',
   },
 });

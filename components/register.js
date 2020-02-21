@@ -38,6 +38,7 @@ export default class Register extends React.Component {
           onChangeText={text => this.setState({invite_code: text})}
           // onBlur={() => setFieldTouched('username')}
           placeholder="Enter Invite Code"
+          placeholderTextColor="white"
         />
         <Button
           title="Submit"
