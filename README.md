@@ -7,6 +7,7 @@
 * [Build and Run ](#Build-and-Run)
    * [Android](#Android)
    * [iOS](#iOS)
+* [Troubleshooting](#Troubleshooting)
 
 #### Requirements
 
@@ -36,7 +37,7 @@ first install all the node modules from bridges/:\
 You can change the Config.URI field to any custom page you want to be displayed when the app launches.
 ```
 export const Config = {
-	URI: development
+	URI: <url>
 }
 ```
 
@@ -74,9 +75,41 @@ ex: "iPhone 11 Pro Max"
 run the app the simulator from the command line with:\
 `react-native run-ios --simulator="Name of iPhone"`
 
-##### Potentional Issues
-If you have gradlew errors you can\
-`android/gradlew clean`\
-or\
-`chmod 755 android/gradlew`
+#### Troubleshooting
 
+##### React Native
+
+###### is the metro server running?
+- `npx react-native start`
+
+###### metro is running but it is angry
+- `yarn install`
+- `npx react-native start --reset-cache`, wait for the dependency graph to load and try to build again.
+ 
+##### iOS
+
+###### It was working before...
+- `yarn install`
+- `cd ios && pod install`
+- `npx react-native start --reset-cache`
+- `npx react-native run-ios`
+
+##### Android 
+###### If you have gradlew errors you can
+`android/gradlew clean` or `chmod 755 android/gradlew`
+
+###### Signatures do not match the previously installed version;
+- on the AVD, uninstall the app and try again
+
+###### `Unable to load script` || metro is running but after the app builds it never actually gets launched on metro
+- you may need update the path in your android/ dev environment to expose metro
+- from root of project, enter into command line (**this may require sudo**):
+    ```bash
+    mkdir android/app/src/main/assets
+    ```
+    ```bash
+    npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
+    ```
+    ```bash
+    npx react-native run-android
+    ```
