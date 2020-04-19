@@ -38,7 +38,6 @@ export default class App extends Component<Props> {
       },
       () => {
         console.log('[js] Received background-fetch event');
-        this.notif.localNotif();
         // Required: Signal completion of your task to native code
         // If you fail to do this, the OS can terminate your app
         // or assign battery-blame for consuming too much background-time
@@ -81,12 +80,31 @@ export default class App extends Component<Props> {
 
   render() {
     this.notif.scheduleNotif(); //test notif
+    this.notif.scheduleFutureSelfNotif(
+        //test notif 2
+        'FutureSelf 1',
+        '1',
+        new Date(Date.now() + 60 * 1000 * 15),
+    );
     this.notif.scheduleCustomNotif(
       //test notif 2
-      'Huzzah',
-      'Muahahahahaha',
-      new Date(Date.now() + 20 * 60 * 1000),
+      'og2',
+      '2',
+      new Date(Date.now() + 5000),
     );
+    this.notif.scheduleCustomNotif(
+        //test notif 2
+        'og3',
+        '3',
+        new Date(Date.now() + 60 * 1000 * 15),
+    );
+    this.notif.scheduleCustomNotif(
+        //test notif 2
+        'og4',
+        '4',
+        new Date(Date.now() + 15000),
+    );
+    this.notif.cancelNotifWithId(3);
     console.log(Config.URI);
     // return <AppNavigation />;
     return <AppNavigation />;

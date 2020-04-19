@@ -32,16 +32,20 @@ let MyHeadlessTask = async () => {
   let response = await fetch(
     'https://facebook.github.io/react-native/movies.json',
   );
+  this.notif.cancelNotifWithId(-1);
   let responseJson = await response.json();
   console.log(
     Platform.OS + ' [BackgroundFetch HeadlessTask] response: ',
     responseJson,
   );
-  this.notif.scheduleCustomNotif(
-    'Headless!',
-    responseJson,
-    new Date(Date.now() + 3 * 1000),
-  );
+  // this.notif.scheduleCustomNotif(
+  //   'Headless!',
+  //   responseJson,
+  //   new Date(Date.now() + 3 * 1000),
+  // );
+
+  /**this works on android**/
+  this.notif.localCustomNotif(responseJson);
   BackgroundFetch.finish();
 };
 
