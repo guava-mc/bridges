@@ -7,6 +7,11 @@ import PushService from '../PushService';
 import appConfig from '../app.json';
 import {Config} from '../config';
 import OverlayIndicator from './overlayIndicator';
+import {
+  notifications,
+  USER_APP_AUTHORIZATION,
+  userAppToken,
+} from '../mastoApi/mastoApi';
 
 type Props = {};
 
@@ -29,64 +34,98 @@ export default class Home extends Component<Props> {
     super(props);
     this.state = {
       senderId: appConfig.senderID,
-      activeSession: {},
+      activeSession: false,
       isLoading: true,
+      authorized: this.props.navigation.state.authorized || false,
     };
   }
   componentDidMount() {
     this.loadAsync();
+    // notifications().then(response =>
+    //   console.log(JSON.stringify(response, null, 2)),
+    // );
   }
   // Fetch the token from storage then navigate to our appropriate place
   loadAsync = async () => {
     AsyncStorage.getItem('activeSession')
       .then(activeSession => {
-        console.log('session: ' + activeSession);
-        this.setState({activeSession: activeSession});
+        if (activeSession !== null) {
+          console.log('session: ' + activeSession);
+          this.setState({activeSession: activeSession});
+          this.setState({authorized: true});
+        }
       })
       .catch(error => {
         console.log({error});
       });
   };
+
+  async getAppAuthToken(url) {
+    await userAppToken(url.substring(url.indexOf('=') + 1))
+      .then(response => {
+        console.log(response);
+        if (response.statusCode === 200) {
+          AsyncStorage.setItem(
+            'activeSession', // TODO update session object
+            JSON.stringify(response.body.access_token),
+          ).then(() => {
+            this.setState({activeSession: response.body.access_token});
+            this.setState({authorized: true});
+            console.log(this.state.activeSession);
+          });
+        }
+      })
+      .catch(error => console.log('error saving session ' + error));
+  }
   render() {
     //import state from previous state
     const {params} = this.props.navigation.state || {resource: ''};
     console.log(Config.URI + params.resource);
-    // const logged = loggedIn().then(response => response === true);
-    // if (!logged) {
-    //   console.log('signing in user');
-    //   this.props.navigation.navigate('AutoLogin');
-    // } else {
     return (
       <View style={styles.overlay}>
         <WebView
           ref={ref => (this.webview = ref)}
-          source={{uri: Config.URI + params.resource}}
+          source={{
+            uri:
+              Config.URI +
+              (this.state.authorized ? '' : USER_APP_AUTHORIZATION),
+          }}
           style={{marginTop: Platform.OS === 'ios' ? 45 : 0}}
           thirdPartyCookiesEnabled={true}
-          //const response = userToken(result);
           onNavigationStateChange={this.handleNavChange}
           onLoadEnd={() => {
             if (this.state.isLoading) {
               this.setState({isLoading: false});
             }
           }}
-          // renderLoading={() => <View style={styles.overlay} />}
-          // startInLoadingState
+          onError={syntheticEvent => {
+            const {nativeEvent} = syntheticEvent;
+            console.warn('WebView error: ', nativeEvent);
+          }}
         />
         {this.state.isLoading && <OverlayIndicator />}
       </View>
     );
   }
 
-  // RICK ROLL
   handleNavChange = newNavState => {
     console.log(newNavState);
-    if (newNavState.url.includes('/web') && !false) {
-      //TODO check if token is in active session
-      console.log('getting App Auth');
-      // this.webview.injectJavaScript(
-      //   'window.location = "https://10.0.2.2:3000/oauth/authorize?response_type=code&client_id=7iMqLghqWXYxy4utJFkHIn77Yl9AMtSMNKcp_oH60pI&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=read%20write%20follow%20push"',
-      // );
+    const url = newNavState.url;
+    if (url.includes('?code=')) {
+      this.getAppAuthToken(url);
+      // } else if (url.includes('/web') && !this.state.authorized) {
+      //   console.log('detected new session, getting App OAuth');
+      //   this.props.navigation.navigate('Home', {
+      //     resource: USER_APP_AUTHORIZATION,
+      //     authorized: true,
+      //   });
+      // TODO GO TO autoLogin or check for log in and auto login from home.
+    } else if (url.includes('/sign_out') || url.includes('/sign_in')) {
+      // TODO if sign_out remove app auth token, if sign_in with an app auth_token, auto log in user
+      console.log('no active session');
+      AsyncStorage.removeItem('activeSession')
+        .then(this.setState({authorized: false}))
+        .catch(error => console.log('error ending session ' + error));
     }
   };
 }
@@ -110,5 +149,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     opacity: 1,
+    backgroundColor: '#393F4F',
   },
 });

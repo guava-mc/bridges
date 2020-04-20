@@ -1,21 +1,52 @@
 import {Platform} from 'react-native';
 
 const isLocal = true;
+const isProd = false;
+
 const port = ':3000';
 const local =
   'http://' + (Platform.OS === 'ios' ? 'localhost' : '10.0.2.2') + port;
-const heal3 = 'https://heal3.poly.asu.edu';
-const development = heal3;
-const v1_3 = 'https://nrd.li/about'; //works
-const v3_0_1 = 'https://linuxrocks.online'; //works
-const URI = local;
 
-export const Config = {
-  URI: URI,
-  client_name: 'Bridges',
+const dev = '';
+
+const prod = '';
+const client_id = '';
+const client_secret = '';
+
+const localConfig = {
+  URI: local,
+  client_name: 'BridgesLocal' + Platform.OS,
   website: '',
-  redirect_uris: (isLocal ? 'http://0.0.0.0:3000' : URI) + '/web/home',
+  redirect_uris: local,
+  scope: 'read write follow push',
+  client_id:
+    Platform.OS === 'ios'
+      ? ''
+      : '',
+  client_secret:
+    Platform.OS === 'ios'
+      ? ''
+      : '',
+};
+
+const devConfig = {
+  URI: dev,
+  client_name: 'BridgesDev',
+  website: '',
+  redirect_uris: dev,
   scope: 'read write follow push',
   client_id: '',
   client_secret: '',
 };
+
+const prodConfig = {
+  URI: prod,
+  client_name: 'Bridges',
+  website: '',
+  redirect_uris: prod,
+  scope: 'read write follow push',
+  client_id: client_id,
+  client_secret: client_secret,
+};
+
+export const Config = isProd ? prodConfig : isLocal ? localConfig : devConfig;

@@ -1,5 +1,6 @@
 import {Platform} from 'react-native';
 import {Config} from '../config';
+import {getOAuth} from '../services/storage';
 
 /**
  *
@@ -27,6 +28,17 @@ export const userAppToken = code => {
   return call_api(USER_APP_TOKEN, {
     method: 'POST',
     body: formData,
+  });
+};
+
+export const notifications = () => {
+  return getOAuth().then(auth_token => {
+    return call_api(NOTIFICATIONS, {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + auth_token,
+      },
+    });
   });
 };
 
@@ -61,3 +73,4 @@ export const USER_APP_AUTHORIZATION =
   `&scope=${Config.scope}`;
 
 const USER_APP_TOKEN = '/oauth/token';
+const NOTIFICATIONS = '/api/v1/notifications';

@@ -8,6 +8,7 @@ import {name as appName} from './app.json';
 import BackgroundFetch from 'react-native-background-fetch';
 import PushService from './PushService';
 import {Config} from './config';
+import {notifications} from './mastoApi/mastoApi';
 
 this.id = 0;
 AppRegistry.registerComponent(appName, () => App);
@@ -29,11 +30,9 @@ let MyHeadlessTask = async () => {
 
   // Perform an example HTTP request.
   // Important:  await asychronous tasks when using HeadlessJS.
-  let response = await fetch(
-    'https://facebook.github.io/react-native/movies.json',
-  );
+  let response = await notifications();
   this.notif.cancelNotifWithId(-1);
-  let responseJson = await response.json();
+  let responseJson = await JSON.stringify(response, null, 2);
   console.log(
     Platform.OS + ' [BackgroundFetch HeadlessTask] response: ',
     responseJson,
