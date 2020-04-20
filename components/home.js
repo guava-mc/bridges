@@ -12,6 +12,7 @@ import {
   USER_APP_AUTHORIZATION,
   userAppToken,
 } from '../mastoApi/mastoApi';
+import {createSession, getSession} from '../services/storage';
 
 type Props = {};
 
@@ -34,25 +35,27 @@ export default class Home extends Component<Props> {
     super(props);
     this.state = {
       senderId: appConfig.senderID,
-      activeSession: false,
+      activeSession: null,
       isLoading: true,
-      authorized: this.props.navigation.state.authorized || false,
+      key: 1,
     };
   }
   componentDidMount() {
     this.loadAsync();
-    // notifications().then(response =>
-    //   console.log(JSON.stringify(response, null, 2)),
-    // );
   }
   // Fetch the token from storage then navigate to our appropriate place
   loadAsync = async () => {
-    AsyncStorage.getItem('activeSession')
-      .then(activeSession => {
+    getSession()
+      .then(async activeSession => {
         if (activeSession !== null) {
-          console.log('session: ' + activeSession);
+          console.log('session: ' + JSON.stringify(activeSession, null, 2));
           this.setState({activeSession: activeSession});
           this.setState({authorized: true});
+          await notifications(this.state.activeSession).then(response =>
+            console.log(JSON.stringify(response, null, 2)),
+          );
+        } else {
+          this.setState({activeSession: null});
         }
       })
       .catch(error => {
@@ -65,13 +68,12 @@ export default class Home extends Component<Props> {
       .then(response => {
         console.log(response);
         if (response.statusCode === 200) {
-          AsyncStorage.setItem(
-            'activeSession', // TODO update session object
-            JSON.stringify(response.body.access_token),
-          ).then(() => {
-            this.setState({activeSession: response.body.access_token});
-            this.setState({authorized: true});
-            console.log(this.state.activeSession);
+          createSession(response.body.access_token).then(() => {
+            getSession().then(session => {
+              this.setState({activeSession: session});
+              this.setState({authorized: true});
+              console.log(this.state.activeSession);
+            });
           });
         }
       })
@@ -79,16 +81,14 @@ export default class Home extends Component<Props> {
   }
   render() {
     //import state from previous state
-    const {params} = this.props.navigation.state || {resource: ''};
-    console.log(Config.URI + params.resource);
+    const hasSession = this.state.activeSession !== null;
     return (
       <View style={styles.overlay}>
         <WebView
           ref={ref => (this.webview = ref)}
+          key={this.state.key}
           source={{
-            uri:
-              Config.URI +
-              (this.state.authorized ? '' : USER_APP_AUTHORIZATION),
+            uri: Config.URI + (hasSession ? '' : USER_APP_AUTHORIZATION),
           }}
           style={{marginTop: Platform.OS === 'ios' ? 45 : 0}}
           thirdPartyCookiesEnabled={true}
@@ -120,13 +120,25 @@ export default class Home extends Component<Props> {
       //     authorized: true,
       //   });
       // TODO GO TO autoLogin or check for log in and auto login from home.
-    } else if (url.includes('/sign_out') || url.includes('/sign_in')) {
+    } else if ((url.includes('/sign_out') || url.includes('/sign_in')) && this.state.activeSession !== null) {
       // TODO if sign_out remove app auth token, if sign_in with an app auth_token, auto log in user
       console.log('no active session');
       AsyncStorage.removeItem('activeSession')
-        .then(this.setState({authorized: false}))
+        .then(() => {
+          this.setState({activeSession: null});
+          this.resetWebViewToInitialUrl();
+        })
         .catch(error => console.log('error ending session ' + error));
     }
+  };
+
+  delay = ms => new Promise(res => setTimeout(res, ms));
+
+  resetWebViewToInitialUrl = () => {
+    this.delay(1000);
+    this.setState({
+      key: this.state.key + 1,
+    });
   };
 }
 

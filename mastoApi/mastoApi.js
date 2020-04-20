@@ -1,6 +1,6 @@
 import {Platform} from 'react-native';
 import {Config} from '../config';
-import {getOAuth} from '../services/storage';
+import {getOAuth, getSession} from '../services/storage';
 
 /**
  *
@@ -31,14 +31,21 @@ export const userAppToken = code => {
   });
 };
 
-export const notifications = () => {
-  return getOAuth().then(auth_token => {
-    return call_api(NOTIFICATIONS, {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + auth_token,
-      },
-    });
+export const acctCredentials = auth => {
+  return call_api(ACCOUNT_CREDENTIALS, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + auth,
+    },
+  });
+};
+
+export const notifications = session => {
+  return call_api(NOTIFICATIONS.replace('{since_id}', session.since_id | ''), {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + session.oAuth,
+    },
   });
 };
 
@@ -73,4 +80,5 @@ export const USER_APP_AUTHORIZATION =
   `&scope=${Config.scope}`;
 
 const USER_APP_TOKEN = '/oauth/token';
-const NOTIFICATIONS = '/api/v1/notifications';
+const ACCOUNT_CREDENTIALS = '/api/v1/accounts/verify_credentials';
+const NOTIFICATIONS = '/api/v1/notifications?since_id={since_id}';

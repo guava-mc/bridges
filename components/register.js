@@ -49,7 +49,7 @@ export default class Register extends React.Component {
         />
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Home', {resource: ''});
+            this.props.navigation.navigate('Home');
           }}>
           <Text style={styles.navtext}>Login</Text>
         </TouchableOpacity>
