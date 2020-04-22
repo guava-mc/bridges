@@ -33,12 +33,15 @@ let MyHeadlessTask = async () => {
   // Important:  await asychronous tasks when using HeadlessJS.
   let session = await getSession();
   let response = await notifications(session);
-  let responseJson = await JSON.stringify(response, null, 2);
+  let responseJson = await JSON.stringify(response.body, null, 2);
   console.log(
     Platform.OS + ' [BackgroundFetch HeadlessTask] response: ',
     responseJson,
   );
-  await updateNotifId(response.body ? (response.body[0] ? response.body[0].since_id : 0) : 0);
+  console.log(response.body[0]);
+  if (response.body) {
+    await updateNotifId(response.body[0] !== null ? response.body[0].id : session.since_id);
+  }
   // this.notif.scheduleCustomNotif(
   //   'Headless!',
   //   responseJson,

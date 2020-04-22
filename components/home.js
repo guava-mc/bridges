@@ -12,7 +12,7 @@ import {
   USER_APP_AUTHORIZATION,
   userAppToken,
 } from '../mastoApi/mastoApi';
-import {createSession, getSession} from '../services/storage';
+import {createSession, getSession, updateNotifId} from '../services/storage';
 
 type Props = {};
 
@@ -51,9 +51,10 @@ export default class Home extends Component<Props> {
           console.log('session: ' + JSON.stringify(activeSession, null, 2));
           this.setState({activeSession: activeSession});
           this.setState({authorized: true});
-          await notifications(this.state.activeSession).then(response =>
+          await notifications(this.state.activeSession).then(response => {
             console.log(JSON.stringify(response, null, 2)),
-          );
+              updateNotifId(response.body[0].id || activeSession.since_id);
+          });
         } else {
           this.setState({activeSession: null});
         }
@@ -120,7 +121,10 @@ export default class Home extends Component<Props> {
       //     authorized: true,
       //   });
       // TODO GO TO autoLogin or check for log in and auto login from home.
-    } else if ((url.includes('/sign_out') || url.includes('/sign_in')) && this.state.activeSession !== null) {
+    } else if (
+      (url.includes('/sign_out') || url.includes('/sign_in')) &&
+      this.state.activeSession !== null
+    ) {
       // TODO if sign_out remove app auth token, if sign_in with an app auth_token, auto log in user
       console.log('no active session');
       AsyncStorage.removeItem('activeSession')
