@@ -1,11 +1,12 @@
 import {Platform} from 'react-native';
 
-const isLocal = true;
+const isLocal = false;
 const isProd = false;
 
 const port = ':3000';
 const local =
   'http://' + (Platform.OS === 'ios' ? 'localhost' : '10.0.2.2') + port;
+
 const dev = '';
 
 const prod = '';
@@ -31,7 +32,7 @@ const localConfig = {
 const devConfig = {
   URI: dev,
   client_name: 'BridgesDev',
-  website: '',
+  website: dev,
   redirect_uris: dev,
   scope: 'read write follow push',
   client_id: '',
@@ -41,7 +42,7 @@ const devConfig = {
 const prodConfig = {
   URI: prod,
   client_name: 'Bridges',
-  website: '',
+  website: prod,
   redirect_uris: prod,
   scope: 'read write follow push',
   client_id: client_id,
