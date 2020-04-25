@@ -1,4 +1,4 @@
-import PushService from '../PushService';
+import PushService from './PushService';
 import {Alert, Platform} from 'react-native';
 import {getSession, updateNotifId} from './storage';
 import {notifications} from '../mastoApi/mastoApi';

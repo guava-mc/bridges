@@ -3,7 +3,7 @@ import {Alert, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import PushService from '../PushService';
+import PushService from '../services/PushService';
 import appConfig from '../app.json';
 import {Config} from '../config';
 import OverlayIndicator from './overlayIndicator';

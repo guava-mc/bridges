@@ -3,7 +3,7 @@ import {Alert} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import PushService from './PushService';
+import PushService from './services/PushService';
 import appConfig from './app.json';
 import {Config} from './config';
 import AppNavigation from './components/navigation';
@@ -27,7 +27,7 @@ type Props = {};
 
 export default class App extends Component<Props> {
   componentDidMount() {
-    // Configure it.
+    // Configure Background service on launch.
     BackgroundFetch.configure(
       {
         minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
@@ -43,9 +43,8 @@ export default class App extends Component<Props> {
       },
       taskId => {
         console.log('[js] Received background-fetch event: ' + taskId);
-        // if (Platform.OS === 'ios') {
+        // if app is in background getNotifs
         getNotifs('FROM APP.js').catch(error => console.log(error));
-        // }
         // Required: Signal completion of your task to native code
         // If you fail to do this, the OS can terminate your app
         // or assign battery-blame for consuming too much background-time

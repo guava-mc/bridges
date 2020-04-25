@@ -1,4 +1,4 @@
 //https://apiko.com/blog/react-native-push-notifications/
-import * as pushNotifications from './pushNotifications';
+import * as PushService from './PushService';
 
-export {pushNotifications};
+export {PushService};
