@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import WebView from 'react-native-webview';
-import {Config} from '../config';
+import {Config} from '../../config';
 import {Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {USER_APP_AUTHORIZATION} from '../mastoApi/mastoApi';

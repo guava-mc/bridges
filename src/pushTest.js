@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import { TextInput, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import NotifService from './NotifService';
-import appConfig from './app.json';
+import appConfig from '../app.json';
 
 type Props = {};
 export default class App extends Component<Props> {

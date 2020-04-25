@@ -31,7 +31,7 @@ export default class Register extends React.Component {
       <View style={styles.frame}>
         <Image
           style={styles.logo}
-          source={require('../resources/bridgesIcon.png')}
+          source={require('../../resources/bridgesIcon.png')}
         />
         <TextInput
           style={styles.textinput}

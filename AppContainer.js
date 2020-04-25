@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Text, View, Button} from 'react-native';
-import {pushNotifications} from './services';
+import {pushNotifications} from './src/services';
 
 const AppContainer = () => {
   const handleOnPress = () => {

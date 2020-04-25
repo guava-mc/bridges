@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {Config} from '../config';
+import {Config} from '../../config';
 import {getOAuth, getSession} from '../services/storage';
 
 /**

@@ -1,4 +1,4 @@
-import {Config} from '../config';
+import {Config} from '../../config';
 import AsyncStorage from '@react-native-community/async-storage';
 import React from 'react';
 import {StyleSheet, View, ActivityIndicator, Platform} from 'react-native';

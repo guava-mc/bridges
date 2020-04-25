@@ -3,7 +3,7 @@ import React from 'react';
 import {View, Image, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import WebView from 'react-native-webview';
-import {Config} from '../config';
+import {Config} from '../../config';
 
 export default class Splash extends React.Component {
   constructor() {
@@ -50,7 +50,7 @@ export default class Splash extends React.Component {
       <View style={styles.frame}>
         <Image
           style={styles.logo}
-          source={require('../resources/bridgesIcon.png')}
+          source={require('../../resources/bridgesIcon.png')}
         />
         <View style={{width: 256, height: 256}} />
       </View>
