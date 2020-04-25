@@ -22,7 +22,7 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
-      android:networkSecurityConfig="@xml/network_security_config"> <!-- adds heal3 cert -->
+      android:networkSecurityConfig="@xml/network_security_config"> <!-- heal3 cert -->
 
         <!-- NOTIFICATIONS -->
         <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_name"
