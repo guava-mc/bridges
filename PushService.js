@@ -69,12 +69,12 @@ export default class NotifService {
       message: 'My Notification Message', // (required)
       playSound: false, // (optional) default: true
       soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-      number: '10', // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+      number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
       actions: '["Yes", "No"]', // (Android only) See the doc for notification actions to know more
     });
   }
 
-  localCustomNotif(json) {
+  localCustomNotif(message) {
     this.lastId++;
     console.log(this.lastId);
     PushNotification.localNotification({
@@ -84,7 +84,7 @@ export default class NotifService {
       autoCancel: true, // (optional) default: true
       largeIcon: 'ic_launcher', // (optional) default: "ic_launcher"
       smallIcon: 'ic_notification', // (optional) default: "ic_notification" with fallback for "ic_launcher"
-      bigText: JSON.stringify(json), // (optional) default: "message" prop
+      bigText: message, // (optional) default: "message" prop
       subText: 'This is a subText', // (optional) default: none
       color: 'red', // (optional) default: system default
       vibrate: true, // (optional) default: true
@@ -100,10 +100,10 @@ export default class NotifService {
 
       /* iOS and Android properties */
       title: 'Background Notification Test', // (optional)
-      message: JSON.stringify(json), // (required)
+      message: message, // (required)
       playSound: false, // (optional) default: true
       soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-      number: '10', // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+      number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
       actions: '["Yes", "No"]', // (Android only) See the doc for notification actions to know more
     });
   }

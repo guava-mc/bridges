@@ -9,8 +9,21 @@ import {Config} from './config';
 import AppNavigation from './components/navigation';
 import BackgroundFetch from 'react-native-background-fetch';
 import Splash from './components/splash';
+import {getNotifs} from './services/bridgesNotifs';
 
 type Props = {};
+
+// this.notif = new PushService(
+//   function() {
+//     Alert.alert('Registered !', JSON.stringify(this));
+//     console.log(this);
+//     this.setState({registerToken: this.token, gcmRegistered: true});
+//   },
+//   function() {
+//     console.log(this.notif);
+//     Alert.alert(this.notif.title, this.notif.message);
+//   },
+// );
 
 export default class App extends Component<Props> {
   componentDidMount() {
@@ -28,12 +41,15 @@ export default class App extends Component<Props> {
         requiresStorageNotLow: false, // Default
         enableHeadless: true,
       },
-      () => {
-        console.log('[js] Received background-fetch event');
+      taskId => {
+        console.log('[js] Received background-fetch event: ' + taskId);
+        // if (Platform.OS === 'ios') {
+        getNotifs('FROM APP.js').catch(error => console.log(error));
+        // }
         // Required: Signal completion of your task to native code
         // If you fail to do this, the OS can terminate your app
         // or assign battery-blame for consuming too much background-time
-        BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+        BackgroundFetch.finish(taskId);
       },
       error => {
         console.log('[js] RNBackgroundFetch failed to start');
