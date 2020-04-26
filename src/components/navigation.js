@@ -24,7 +24,7 @@ const cont = createStackNavigator(
     defaultNavigationOptions: {
       headerShown: false,
       gestureEnabled: false,
-        //TODO look into removing navigation animation
+      //TODO look into removing navigation animation
     },
   },
 );

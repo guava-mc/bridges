@@ -6,14 +6,13 @@ import BackgroundFetch from 'react-native-background-fetch';
 
 this.notif = new PushService(
   function() {
-    // Alert.alert('Registered !', JSON.stringify(this));
     console.log(this);
     this.setState({registerToken: this.token, gcmRegistered: true});
   },
+  // invoked when user clicks on a notification and is brought back to app
   function() {
     // console.log(this);
-    // Alert.alert(this.notif.title, this.notif.message);
-    // Alert.alert('hi mom');
+    // TODO
   },
 );
 
@@ -25,10 +24,7 @@ export const getNotifs = async text => {
   let session = await getSession();
   let response = await notifications(session);
   let responseJson = await JSON.stringify(response.body, null, 2);
-  console.log(
-    Platform.OS + ' [BackgroundFetch] response: ',
-    responseJson,
-  );
+  console.log(Platform.OS + ' [BackgroundFetch] response: ', responseJson);
   try {
     if (response.body) {
       await updateNotifId(

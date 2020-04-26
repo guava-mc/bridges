@@ -1,10 +1,4 @@
 import React, {Component} from 'react';
-import {Alert} from 'react-native';
-import {WebView} from 'react-native-webview';
-import {Platform} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import PushService from './src/services/PushService';
-import appConfig from './app.json';
 import {Config} from './config';
 import AppNavigation from './src/components/navigation';
 import BackgroundFetch from 'react-native-background-fetch';
@@ -12,18 +6,6 @@ import Splash from './src/components/splash';
 import {getNotifs} from './src/services/bridgesNotifs';
 
 type Props = {};
-
-// this.notif = new PushService(
-//   function() {
-//     Alert.alert('Registered !', JSON.stringify(this));
-//     console.log(this);
-//     this.setState({registerToken: this.token, gcmRegistered: true});
-//   },
-//   function() {
-//     console.log(this.notif);
-//     Alert.alert(this.notif.title, this.notif.message);
-//   },
-// );
 
 export default class App extends Component<Props> {
   componentDidMount() {

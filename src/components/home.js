@@ -16,18 +16,6 @@ import {createSession, getSession, updateNotifId} from '../services/storage';
 
 type Props = {};
 
-// ex need to update with asyncStorage and proper endpoints, etc, etc
-// async function loggedIn() {
-//   try {
-//     let response = await fetch(Config.URI + '/web/timelines/home');
-//     let responseJson = await response.url.toString().includes('home');
-//     console.log('logged in: ' + responseJson);
-//     return responseJson;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
 export default class Home extends Component<Props> {
   webview = null;
   count = 0;
@@ -43,20 +31,25 @@ export default class Home extends Component<Props> {
   componentDidMount() {
     this.loadAsync();
   }
+
   // Fetch the token from storage then navigate to our appropriate place
   loadAsync = async () => {
     getSession()
       .then(async activeSession => {
-        if (activeSession !== null) {
-          console.log('session: ' + JSON.stringify(activeSession, null, 2));
-          this.setState({activeSession: activeSession});
-          this.setState({authorized: true});
-          await notifications(this.state.activeSession).then(response => {
-            console.log(JSON.stringify(response, null, 2)),
-              updateNotifId(response.body[0].id || activeSession.since_id);
-          });
-        } else {
-          this.setState({activeSession: null});
+        try {
+          if (activeSession !== null) {
+            console.log('session: ' + JSON.stringify(activeSession, null, 2));
+            this.setState({activeSession: activeSession});
+            this.setState({authorized: true});
+            await notifications(this.state.activeSession).then(response => {
+              console.log(JSON.stringify(response, null, 2)),
+                updateNotifId(response.body[0].id || activeSession.since_id);
+            });
+          } else {
+            this.setState({activeSession: null});
+          }
+        } catch (e) {
+          console.log('src/home#loadAsync: ' + e);
         }
       })
       .catch(error => {
@@ -83,13 +76,21 @@ export default class Home extends Component<Props> {
   render() {
     //import state from previous state
     const hasSession = this.state.activeSession !== null;
+    const {params} = this.props.navigation.state;
+    console.log('resource: ' + params.resource);
     return (
       <View style={styles.overlay}>
         <WebView
           ref={ref => (this.webview = ref)}
           key={this.state.key}
           source={{
-            uri: Config.URI + (hasSession ? '' : USER_APP_AUTHORIZATION),
+            uri:
+              Config.URI +
+              (params.resource
+                ? params.resource
+                : hasSession
+                ? ''
+                : USER_APP_AUTHORIZATION),
           }}
           style={{marginTop: Platform.OS === 'ios' ? 45 : 0}}
           thirdPartyCookiesEnabled={true}
@@ -114,25 +115,25 @@ export default class Home extends Component<Props> {
     const url = newNavState.url;
     if (url.includes('?code=')) {
       this.getAppAuthToken(url);
-      // } else if (url.includes('/web') && !this.state.authorized) {
-      //   console.log('detected new session, getting App OAuth');
-      //   this.props.navigation.navigate('Home', {
-      //     resource: USER_APP_AUTHORIZATION,
-      //     authorized: true,
-      //   });
       // TODO GO TO autoLogin or check for log in and auto login from home.
     } else if (
       (url.includes('/sign_out') || url.includes('/sign_in')) &&
       this.state.activeSession !== null
     ) {
       // TODO if sign_out remove app auth token, if sign_in with an app auth_token, auto log in user
-      console.log('no active session');
+      console.log('logging out, ending session');
       AsyncStorage.removeItem('activeSession')
         .then(() => {
           this.setState({activeSession: null});
-          this.resetWebViewToInitialUrl();
         })
+        .then(this.resetWebViewToInitialUrl())
         .catch(error => console.log('error ending session ' + error));
+    } else if (newNavState.title.includes('Security verification failed')) {
+      Alert.alert(
+        'Logout Error',
+        'If you meant to log out, please try to log out again.',
+      );
+      this.resetWebViewToInitialUrl();
     }
   };
 
