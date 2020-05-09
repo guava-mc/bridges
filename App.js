@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
+import {AppState} from 'react-native';
 import {Config} from './config';
 import AppNavigation from './src/components/navigation';
 import BackgroundFetch from 'react-native-background-fetch';
-import Splash from './src/components/splash';
+import Splash from './src/views/splash';
 import {getNotifs} from './src/services/bridgesNotifs';
 
 type Props = {};
@@ -25,8 +26,12 @@ export default class App extends Component<Props> {
       },
       taskId => {
         console.log('[js] Received background-fetch event: ' + taskId);
-        // if app is in background getNotifs
-        getNotifs('FROM APP.js').catch(error => console.log(error));
+        if (AppState.currentState !== 'active') {
+          getNotifs('FROM APP.js').catch(error => console.log(error));
+        } else {
+          console.log('app in forgeround, skipping notification');
+        }
+
         // Required: Signal completion of your task to native code
         // If you fail to do this, the OS can terminate your app
         // or assign battery-blame for consuming too much background-time

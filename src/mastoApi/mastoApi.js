@@ -1,6 +1,5 @@
 import {Platform} from 'react-native';
 import {Config} from '../../config';
-import {getOAuth, getSession} from '../services/storage';
 
 /**
  *
@@ -49,6 +48,19 @@ export const notifications = session => {
   });
 };
 
+export const postStatus = options => {
+  let formData = new FormData();
+  formData.append('status', options.status);
+  formData.append('visibility', options.visibility);
+  return call_api(POST_STATUS, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + options.oAuth,
+    },
+    body: formData,
+  });
+};
+
 /**
  *
  * @param options ex:
@@ -82,3 +94,4 @@ export const USER_APP_AUTHORIZATION =
 const USER_APP_TOKEN = '/oauth/token';
 const ACCOUNT_CREDENTIALS = '/api/v1/accounts/verify_credentials';
 const NOTIFICATIONS = '/api/v1/notifications?since_id={since_id}';
+const POST_STATUS = '/api/v1/statuses';

@@ -5,9 +5,9 @@ import React, {Component} from 'react';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
-import Splash from './splash';
-import Register from './register';
-import Home from './home';
+import Splash from '../views/splash';
+import Register from '../views/register';
+import Home from '../views/home';
 import Login from './login';
 import AutoLogin from './autoLogin';
 

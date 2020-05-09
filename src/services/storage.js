@@ -24,11 +24,9 @@ export async function getOAuth() {
 
 export async function createSession(auth) {
   return acctCredentials(auth).then(acctCreds => {
-    // console.log(JSON.stringify(acctCreds, null, 2));
     buildSessionObj(acctCreds.body, auth)
       .then(session => {
         notifications(session).then(notif => {
-          // console.log('\n\n\n' + JSON.stringify(notif, null, 2));
           session.since_id = notif.body[0] ? notif.body[0].id : 0;
           console.log(JSON.stringify(session, null, 2));
           AsyncStorage.setItem('activeSession', JSON.stringify(session));

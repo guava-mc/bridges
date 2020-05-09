@@ -19,14 +19,9 @@ const localConfig = {
   website: '',
   redirect_uris: local,
   scope: 'read write follow push',
-  client_id:
-    Platform.OS === 'ios'
-      ? ''
-      : '',
-  client_secret:
-    Platform.OS === 'ios'
-      ? ''
-      : '',
+  client_id: Platform.OS === 'ios' ? '' : '',
+  client_secret: Platform.OS === 'ios' ? '' : '',
+  bot_name: '',
 };
 
 const devConfig = {
@@ -37,6 +32,7 @@ const devConfig = {
   scope: 'read write follow push',
   client_id: '',
   client_secret: '',
+  bot_name: '',
 };
 
 const prodConfig = {
@@ -47,6 +43,7 @@ const prodConfig = {
   scope: 'read write follow push',
   client_id: client_id,
   client_secret: client_secret,
+  bot_name: '',
 };
 
 export const Config = isProd ? prodConfig : isLocal ? localConfig : devConfig;
