@@ -5,8 +5,10 @@
         <!-- For React Native Hot-reloading system -->
         <!-- If you are running on a device insert your computer IP -->
         <domain includeSubdomains="true">heal3.poly.asu.edu</domain>
+        <domain includeSubdomains="true">heal1.poly.asu.edu</domain>
         <trust-anchors>
-            <certificates src="@raw/heal_ca" />
+            <certificates src="@raw/heal3_ca" />
+            <certificates src="@raw/heal1_ca" />
         </trust-anchors>
     </domain-config>
 </network-security-config>
