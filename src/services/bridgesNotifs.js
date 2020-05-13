@@ -49,9 +49,9 @@ export const GENERIC_NOTIF = {
   message: 'Come check out what has happened while you were away.',
 };
 
-export const HIGH_NOTIF_TITLE = name => name + ' has sent you a new message';
+export const HIGH_NOTIF_TITLE = name => name + ' has sent you a new message.';
 export const MEDIUM_NOTIF_TITLE = (name, type) =>
-  'you have a new ' + type + ' from ' + name;
+  'You have a new ' + type + ' from ' + name + '.';
 
 export const PRIORITY = {
   HIGH: ['mention'],
@@ -88,6 +88,10 @@ export const buildNotif = responseJson => {
         }
       }
     }
+    new_notif.message =
+      new_notif.message + responseJson.length > 1
+        ? ' And ' + (responseJson.length - 1) + ' new notifications.'
+        : '';
     console.log(JSON.stringify(new_notif, null, 2));
     return new_notif;
   } else {
