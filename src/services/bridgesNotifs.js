@@ -88,10 +88,10 @@ export const buildNotif = responseJson => {
         }
       }
     }
-    new_notif.message =
-      new_notif.message + responseJson.length > 1
-        ? ' And ' + (responseJson.length - 1) + ' new notifications.'
-        : '';
+    // new_notif.message =
+    //   new_notif.message + responseJson.length > 1
+    //     ? ' And ' + (responseJson.length - 1) + ' new notifications.'
+    //     : '';
     console.log(JSON.stringify(new_notif, null, 2));
     return new_notif;
   } else {
