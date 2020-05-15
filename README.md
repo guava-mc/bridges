@@ -139,6 +139,8 @@ PRIORITY = {
 };
 ```
 
+To test the background service notifications refer to [react-native-background-fetch#debugging](https://github.com/transistorsoft/react-native-background-fetch#debugging)
+
 #### Navigation Logs
 Every time the webview navigates to a new page it is logged in [home.handleNavChange](src/views/home.js) this can be used to log use in the future. 
 
